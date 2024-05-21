@@ -19,3 +19,12 @@
 [submodule "openjdk17-devel"]
 	path = openjdk17-devel
 	url = https://repo1.dso.mil/dsop/redhat/openjdk/openjdk17.x/openjdk17-devel
+[submodule "openjdk8"]
+	path = openjdk8
+	url = https://repo1.dso.mil/dsop/redhat/openjdk/openjdk8.x/openjdk8.git
+[submodule "openjdk8-devel"]
+	path = openjdk8-devel
+	url = https://repo1.dso.mil/dsop/redhat/openjdk/openjdk8.x/openjdk8-devel.git
+[submodule "openjdk8-slim"]
+	path = openjdk8-slim
+	url = https://repo1.dso.mil/dsop/redhat/openjdk/openjdk8.x/openjdk-8-slim.git
