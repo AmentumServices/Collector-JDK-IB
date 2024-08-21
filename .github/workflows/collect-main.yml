@@ -6,6 +6,8 @@ on:
       - main
   schedule:
     - cron: "0 0 * * 1" # Update weekly on Monday Midnight
+  workflow_dispatch:
+
 jobs:
   Date:
     runs-on: ubuntu-latest
@@ -124,7 +126,19 @@ jobs:
           cat ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso.sha
 
       - name: Show ISO & Hash
-        run: ls -alh *.iso*
+        run: ls -Alh *.iso*
+
+      - name: Upload ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso
+          path: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso
+
+      - name: Upload ISO SHA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso.sha
+          path: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso.sha
 
   Release:
     runs-on: ubuntu-latest
@@ -142,7 +156,7 @@ jobs:
           merge-multiple: true
 
       - name: Show Artifacts
-        run: ls -alh ${{ vars.COLLECTOR }}-*.*
+        run: ls -Alh ${{ vars.COLLECTOR }}-*.*
 
       - name: Set up git
         run: |
@@ -168,7 +182,7 @@ jobs:
           files: |
             ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.bundle
             ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.tgz
-            ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso
+            ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso*
 
   Sharepoint:
     runs-on: ubuntu-latest
@@ -177,9 +191,6 @@ jobs:
       contents: write
       pull-requests: read
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
