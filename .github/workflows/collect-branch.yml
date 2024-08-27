@@ -1,9 +1,10 @@
 name: JDK 17 IB Collector (Branch)
-run-name: ${{ github.actor }} is Collecting 🚀
+run-name: ${{ github.actor }} is Collecting a Branch! 🚀
 on:
   push:
     branches-ignore:
       - main
+  workflow_dispatch:
 
 jobs:
   Date:
@@ -28,7 +29,7 @@ jobs:
       - name: Install Skopeo
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y skopeo
+          sudo apt-get install -y skopeo pigz
 
       - name: DSO Login
         run: |
@@ -48,7 +49,7 @@ jobs:
 
       - name: TARchive Skopeo Output
         run: |
-          tar -cvz --remove-files \
+          tar -cv -Ipigz --remove-files \
             -f ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.tgz ${{ vars.COLLECTOR }}
           ls -Alh ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.tgz
 
@@ -170,7 +171,6 @@ jobs:
 
       - name: Show Artifacts
         run: ls -Alh ${{ vars.COLLECTOR }}-*.*
-
 
   Sharepoint:
     runs-on: ubuntu-latest
