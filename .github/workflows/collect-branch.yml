@@ -159,6 +159,18 @@ jobs:
           name: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.sha
           path: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.sha
 
+      - name: ISO Table of contents
+        run: |
+          tree -a ${{ vars.COLLECTOR }} \
+            | tee ${{ vars.COLLECTOR }}/${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso.txt
+
+      - name: Upload iso ToC artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso.txt
+          path: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso.txt
+          if-no-files-found: error
+
       - name: Make ISO
         run: |
           mkisofs -J -R -v -T -l \
